@@ -125,7 +125,7 @@ long LinuxParser::Jiffies() { return ActiveJiffies() + IdleJiffies(); }
 // https://stackoverflow.com/questions/1420426/how-to-calculate-the-cpu-usage-of-a-process-by-pid-in-linux-from-c
 long LinuxParser::ActiveJiffies(int pid) {
   string unwantedToken, line;
-  long value, activeJiffies;
+  long value, activeJiffies = 0;
   std::ifstream fileStream(kProcDirectory + to_string(pid) + kStatFilename);
   if (fileStream.is_open()) {
     std::getline(fileStream, line);
@@ -134,7 +134,7 @@ long LinuxParser::ActiveJiffies(int pid) {
       lineStream >> unwantedToken;
     }
     // Column 14-17
-    for (int i = 0; i < 4; i++) {
+    for (auto i = 0; i < 4; i++) {
       lineStream >> value;
       activeJiffies += value;
     }
