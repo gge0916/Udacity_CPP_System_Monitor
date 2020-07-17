@@ -2,7 +2,7 @@
 
 #include "process.h"
 #include "linux_parser.h"
-
+#include <unistd.h>
 using std::string;
 using std::to_string;
 using std::vector;
@@ -14,7 +14,11 @@ int Process::Pid() const { return pid_; }
 
 // Return this process's CPU utilization
 float Process::CpuUtilization() const {
-  return LinuxParser::ActiveJiffies(pid_) / LinuxParser::ActiveJiffies();
+  long totalTime = LinuxParser::ActiveJiffies(pid_);
+  long seconds = LinuxParser::UpTime() - LinuxParser::UpTime(pid_);
+  long herz = sysconf(_SC_CLK_TCK);
+
+  return 100 * ((totalTime / herz) / seconds);
 }
 
 // Return the command that generated this process
