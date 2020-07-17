@@ -130,7 +130,7 @@ long LinuxParser::ActiveJiffies(int pid) {
   if (fileStream.is_open()) {
     std::getline(fileStream, line);
     std::istringstream lineStream(line);
-    for (int i = 0; i < 13; ++i) {
+    for (int i = 0; i < 13; i++) {
       lineStream >> unwantedToken;
     }
     // Column 14-17
