@@ -1,5 +1,5 @@
 #include <string>
-
+#include <iostream>
 #include "process.h"
 #include "linux_parser.h"
 #include <unistd.h>
@@ -16,9 +16,11 @@ int Process::Pid() const { return pid_; }
 float Process::CpuUtilization() const {
   long totalTime = LinuxParser::ActiveJiffies(pid_);
   long seconds = LinuxParser::UpTime() - LinuxParser::UpTime(pid_);
-  long herz = sysconf(_SC_CLK_TCK);
-
-  return 100 * ((totalTime / herz) / seconds);
+  // Some processes are weird....
+  if (seconds == 0) {
+    return 0;
+  }
+  return 100 * totalTime / seconds;
 }
 
 // Return the command that generated this process

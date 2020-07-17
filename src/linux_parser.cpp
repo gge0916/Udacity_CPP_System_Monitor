@@ -2,7 +2,7 @@
 
 #include <dirent.h>
 #include <unistd.h>
-
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -283,6 +283,7 @@ string LinuxParser::User(int pid) {
 
 // Read and return the uptime of a process
 long LinuxParser::UpTime(int pid) {
+  // std::cout << "Processing pid:" << std::to_string(pid) << "\n";
   string line, value;
   vector<string> values{};
   std::ifstream stream(kProcDirectory + std::to_string(pid) + kStatFilename);
@@ -293,7 +294,6 @@ long LinuxParser::UpTime(int pid) {
       values.emplace_back(value);
     }
   }
-  // Column #22: starttime - Time when the process started, measured in clock
-  // ticks
+  // std::cout << "pid:" << std::to_string(pid) << ", starttime:" << std::to_string(stol(values[21]) / sysconf(_SC_CLK_TCK)) << "\n";
   return stol(values[21]) / sysconf(_SC_CLK_TCK);
 }
